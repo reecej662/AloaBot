@@ -195,6 +195,10 @@ const app = express();
 
 app.use(bodyParser.text({type: 'application/json'}));
 
+app.get('/', (req, res) => {
+    res.send("AloaBot up and running");
+});
+
 app.get('/webhook/', (req, res) => {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
@@ -204,6 +208,7 @@ app.get('/webhook/', (req, res) => {
         }, 3000);
     } else {
         res.send('Error, wrong validation token');
+        console.log(FB_VERIFY_TOKEN);
     }
 });
 
