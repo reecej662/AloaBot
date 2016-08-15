@@ -207,8 +207,7 @@ app.get('/webhook/', (req, res) => {
             doSubscribeRequest();
         }, 3000);
     } else {
-        res.send('Error, wrong validation token');
-        console.log(FB_VERIFY_TOKEN);
+        res.send('Error, wrong validation token' + FB_VERIFY_TOKEN);
     }
 });
 
