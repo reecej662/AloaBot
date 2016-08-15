@@ -12,7 +12,7 @@ const REST_PORT = (process.env.PORT || 5000);
 const APIAI_ACCESS_TOKEN = process.env.APIAI_ACCESS_TOKEN;
 const APIAI_LANG = process.env.APIAI_LANG || 'en';
 const FB_VERIFY_TOKEN = process.env.FB_VERIFY_TOKEN;
-const FB_PAGE_ACCESS_TOKEN = "aloalabs1";
+const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
@@ -195,10 +195,6 @@ const app = express();
 
 app.use(bodyParser.text({type: 'application/json'}));
 
-app.get('/', (req, res) => {
-    res.send("AloaBot up and running");
-});
-
 app.get('/webhook/', (req, res) => {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
@@ -207,7 +203,7 @@ app.get('/webhook/', (req, res) => {
             doSubscribeRequest();
         }, 3000);
     } else {
-        res.send('Error, wrong validation token' + FB_VERIFY_TOKEN);
+        res.send('Error, wrong validation token');
     }
 });
 
