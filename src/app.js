@@ -8,6 +8,8 @@ const request = require('request');
 const JSONbig = require('json-bigint');
 const async = require('async');
 
+const mysql = require('mysql');
+
 const REST_PORT = (process.env.PORT || 5000);
 const APIAI_ACCESS_TOKEN = process.env.APIAI_ACCESS_TOKEN;
 const APIAI_LANG = process.env.APIAI_LANG || 'en';
@@ -82,6 +84,17 @@ function processEvent(event) {
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {text: textPart}, callback);
                     });
+                }
+
+
+                let projectIncomplete = response.result.actionIncomplete;
+                if(!projectIncomplete) {
+                    let clientName = response.result.parameters.client_name;
+                    let payAmount = response.result.parameters.pay_amount;
+                    let projectTitle = response.result.parameters.project_title;
+                    let projectType = response.result.parameters.project_type;
+
+                    addNewProject(projectTitle, clientName, projectType, payAmount);
                 }
 
             }
@@ -251,3 +264,24 @@ app.listen(REST_PORT, () => {
 });
 
 doSubscribeRequest();
+
+function addNewProject(name, client, type, cost) {
+  var table = 'projects'
+  var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
+  var sql = "INSERT INTO projects SET ?";
+  var inserts = {'Name': name, 'Client': client, 'Type': type, 'Cost': cost};
+
+  connection.connect(function(err) {
+    if(err) throw err 
+    console.log("Connected to aloabot_db");
+  });
+
+  connection.query(sql, inserts, function(err, result) {
+    if(err) {
+      throw err;
+    }
+
+    console.log(result);
+    connection.end();
+  });
+}
