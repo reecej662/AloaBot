@@ -7,15 +7,15 @@ const REST_PORT = 5000;
 //   database : 'projects',
 //   connectTimeout: 60000
 // });
+var table = 'projects'
 
 var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
 
 connection.connect(function(err) {
   if(err) throw err 
-  console.log("Connected to robot_db");
+  console.log("Connected to aloabot_db");
 });
 
-var table = 'projects'
 // var searchParam = 'fav_lang'
 // var langQuery = 'java';
 
@@ -23,7 +23,7 @@ if(process.argv.length > 2) {
   langQuery = process.argv[2];
 }
 
-var query = "SELECT * FROM " + db; // + " WHERE meta_key='" + searchParam + "' AND meta_value LIKE '%" + langQuery + "%'"
+var query = "SELECT * FROM " + table; // + " WHERE meta_key='" + searchParam + "' AND meta_value LIKE '%" + langQuery + "%'"
 console.log("SQL Command: " + query);
 
 connection.query(query, function(err, rows, fields) {
