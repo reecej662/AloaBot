@@ -79,6 +79,12 @@ function processEvent(event) {
                     console.log('Response as text message: ' + responseText);
                     // facebook API limit for text length is 320,
                     // so we must split message if needed
+
+                    if(action == '') {
+                        responseText += ' ' + getProjects(response.result.parameters.client);
+                        console.log(responseText);
+                    }
+
                     var splittedText = splitResponse(responseText);
 
                     async.eachSeries(splittedText, (textPart, callback) => {
@@ -88,13 +94,18 @@ function processEvent(event) {
 
 
                 let projectIncomplete = response.result.actionIncomplete;
-                if(!projectIncomplete) {
+
+                if(action == 'make_project' && !projectIncomplete) {
                     let clientName = response.result.parameters.client_name;
                     let payAmount = response.result.parameters.pay_amount;
                     let projectTitle = response.result.parameters.project_title;
                     let projectType = response.result.parameters.project_type;
 
                     addNewProject(projectTitle, clientName, projectType, payAmount);
+                } else if(action == 'getProjects') {
+                    let client = response.result.parameters.client;
+                    var result = getProjects(client);
+                    console.log(result);
                 }
 
             }
@@ -272,7 +283,7 @@ function addNewProject(name, client, type, cost) {
   var inserts = {'Name': name, 'Client': client, 'Type': type, 'Cost': cost};
 
   connection.connect(function(err) {
-    if(err) throw err 
+    if(err) throw err; 
     console.log("Connected to aloabot_db");
   });
 
@@ -284,4 +295,30 @@ function addNewProject(name, client, type, cost) {
     console.log(result);
     connection.end();
   });
+}
+
+function getProjects(client) => result {
+    var table = 'projects';
+    var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
+    var sql = "SELECT * from" + table;
+    var result = ""
+
+    if(client != ""){
+        query += " WHERE client=" + client;
+    }
+
+    connection.connect(function(err) {
+        if(err) throw err;
+        console.log("Connected to " + table);
+    })
+
+    connection.query(sql, function(err, result) {
+        if(err) throw err;
+
+        console.log(result);
+        result = result;
+        connection.end();
+    });
+
+    return result;
 }
