@@ -19,14 +19,6 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
 
-// var config = {
-//     apiKey: "AIzaSyBDymKteGBJBdbWizGG3bglpGxGeJd7v0s",
-//     authDomain: "aloaprojects.firebaseapp.com",
-//     databaseURL: "https://aloaprojects.firebaseio.com",
-//     storageBucket: "aloaprojects.appspot.com",
-// };
-// firebase.initializeApp(config);
-
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
@@ -80,16 +72,22 @@ function processEvent(event) {
                     // facebook API limit for text length is 320,
                     // so we must split message if needed
 
+                    var sendMessage = function sendMessage(message) {
+
+                        var splittedText = splitResponse(message);
+
+                        async.eachSeries(splittedText, (textPart, callback) => {
+                            sendFBMessage(sender, {text: textPart}, callback);
+                        });
+                    }
+
                     if(action == 'get_projects') {
                         responseText += ' ' + getProjects(response.result.parameters.client);
                         console.log(responseText);
+                        getProjects(response.result.parameters.client, sendMessage(message));
+                    } else {
+                        sendMessage(responseText);
                     }
-
-                    var splittedText = splitResponse(responseText);
-
-                    async.eachSeries(splittedText, (textPart, callback) => {
-                        sendFBMessage(sender, {text: textPart}, callback);
-                    });
                 }
 
 
@@ -297,7 +295,7 @@ function addNewProject(name, client, type, cost) {
   });
 }
 
-function getProjects(client) {
+function getProjects(client, completion) {
     var table = 'projects';
     var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
     var sql = "SELECT * FROM " + table;
@@ -312,12 +310,18 @@ function getProjects(client) {
         console.log("Connected to " + table);
     })
 
-    connection.query(sql, function(err, result) {
+    connection.query(sql, function(err, rows, fields) {
         if(err) throw err;
 
+        for(var i in rows) {
+            result += rows[i].name + " for " + rows[i].client + ", a " + rows[i].type + " project with a pay of " + rows[i].cost + ", ";
+        }
+
         console.log(result);
-        result = result;
+
         connection.end();
+
+        completion(result);
     });
 
     return result;
