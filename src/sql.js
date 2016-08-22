@@ -38,17 +38,15 @@ connection.query(query, function(err, rows, fields) {
 });
 
 function addNewProject(name, client, type, cost) {
-  var query = "INSERT INTO projects (name, client, type, cost) VALUES (";
-  query += name + ', ';
-  query += client + ', ';
-  query += type + ', ';
-  query += cost + ') ';
+  var sql = "INSERT INTO projects SET ?";
+  var inserts = {'Name': name, 'Client': client, 'Type': type, 'Cost': cost};
 
-  connection.query(query, function(err, result) {
+
+  connection.query(query, inserts, function(err, result) {
     if(err) {
-      return connection.rollback(function(){
-        throw err;
-      });
+      throw err;
     }
   });
+
+  console.log(query.sql);
 }
