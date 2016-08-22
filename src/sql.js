@@ -15,9 +15,9 @@ connection.connect(function(err) {
   console.log("Connected to robot_db");
 });
 
-var db = 'projects'
-var searchParam = 'fav_lang'
-var langQuery = 'java';
+var table = 'projects'
+// var searchParam = 'fav_lang'
+// var langQuery = 'java';
 
 if(process.argv.length > 2) {
   langQuery = process.argv[2];
@@ -27,25 +27,20 @@ var query = "SELECT * FROM " + db; // + " WHERE meta_key='" + searchParam + "' A
 console.log("SQL Command: " + query);
 
 connection.query(query, function(err, rows, fields) {
-  
-  // for (var i in rows) {
-  //   var query = 'SELECT display_name FROM wp_users WHERE ID=' + rows[i].user_id;
-      
-  // callLanguageQuery(query);
-  // }
-  
+
   for(var i in rows) {
     console.log(rows[i]);
   }
 
+  addNewProject('TestProject', 'TestClient', 'design', '1000');
+
   connection.end();
 });
 
-function callLanguageQuery(query) {
-  connection.query(query, function(err, rows, fields) {
-    for (var i in rows) {
-      console.log(rows[i].display_name + ' is interested in ' + langQuery);
-    }
-  });
+function addNewProject(name, client, type, cost) {
+  var query = "INSERT INTO projects (name, client, type, cost) VALUES (";
+  query += name + ', ';
+  query += client + ', ';
+  query += type + ', ';
+  query += cost + ') ';
 }
-
