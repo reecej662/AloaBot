@@ -33,19 +33,19 @@ connection.query(query, function(err, rows, fields) {
   }
 
   addNewProject('TestProject', 'TestClient', 'design', '1000');
-
-  connection.end();
 });
 
 function addNewProject(name, client, type, cost) {
   var sql = "INSERT INTO projects SET ?";
   var inserts = {'Name': name, 'Client': client, 'Type': type, 'Cost': cost};
 
-
   connection.query(query, inserts, function(err, result) {
     if(err) {
       throw err;
     }
+
+    console.log(result);
+    connection.end();
   });
 
   console.log(query.sql);
