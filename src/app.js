@@ -17,6 +17,18 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
 
+ var firebase = require("firebase/app");
+  require("firebase/auth");
+  require("firebase/database");
+
+var config = {
+    apiKey: "AIzaSyBDymKteGBJBdbWizGG3bglpGxGeJd7v0s",
+    authDomain: "aloaprojects.firebaseapp.com",
+    databaseURL: "https://aloaprojects.firebaseio.com",
+    storageBucket: "aloaprojects.appspot.com",
+};
+firebase.initializeApp(config);
+
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
