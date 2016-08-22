@@ -28,12 +28,16 @@ console.log("SQL Command: " + query);
 
 connection.query(query, function(err, rows, fields) {
   
-  for (var i in rows) {
-    var query = 'SELECT display_name FROM wp_users WHERE ID=' + rows[i].user_id;
+  // for (var i in rows) {
+  //   var query = 'SELECT display_name FROM wp_users WHERE ID=' + rows[i].user_id;
       
-  callLanguageQuery(query);
-  }
+  // callLanguageQuery(query);
+  // }
   
+  for(var i in rows) {
+    console.log(rows[i]);
+  }
+
   connection.end();
 });
 
