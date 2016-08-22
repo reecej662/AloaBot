@@ -80,7 +80,7 @@ function processEvent(event) {
                     // facebook API limit for text length is 320,
                     // so we must split message if needed
 
-                    if(action == '') {
+                    if(action == 'get_projects') {
                         responseText += ' ' + getProjects(response.result.parameters.client);
                         console.log(responseText);
                     }
@@ -102,7 +102,7 @@ function processEvent(event) {
                     let projectType = response.result.parameters.project_type;
 
                     addNewProject(projectTitle, clientName, projectType, payAmount);
-                } else if(action == 'getProjects') {
+                } else if(action == 'get_projects') {
                     let client = response.result.parameters.client;
                     var result = getProjects(client);
                     console.log(result);
