@@ -297,7 +297,7 @@ function addNewProject(name, client, type, cost) {
   });
 }
 
-function getProjects(client) => result {
+function getProjects(client) {
     var table = 'projects';
     var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
     var sql = "SELECT * from" + table;
