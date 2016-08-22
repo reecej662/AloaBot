@@ -43,4 +43,12 @@ function addNewProject(name, client, type, cost) {
   query += client + ', ';
   query += type + ', ';
   query += cost + ') ';
+
+  connection.query(query, function(err, result) {
+    if(err) {
+      return connection.rollback(function(){
+        throw err;
+      });
+    }
+  });
 }
