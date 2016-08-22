@@ -1,7 +1,5 @@
 const mysql = require('mysql');
 const REST_PORT = 5000;
-
-var mysql      = require('mysql');
 // var connection = mysql.createConnection({
 //   host     : 'localhost',
 //   user     : 'reece@aloalabs.com',
