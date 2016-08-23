@@ -103,7 +103,7 @@ function processEvent(event) {
                     addNewProject(projectTitle, clientName, projectType, payAmount);
                 } else if(action == 'get_projects') {
                     let client = response.result.parameters.client;
-                    var result = getProjects(client);
+                    var result = getProjects(client, function(message){});
                     console.log(result);
                 }
 
