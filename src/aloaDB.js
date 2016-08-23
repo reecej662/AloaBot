@@ -28,7 +28,7 @@ module.exports.getProjects = function(client, completion) {
     var result = "\n"
 
     if(client != ""){
-        query += " WHERE client=" + client;
+        sql += " WHERE client LIKE %" + client + "%";
     }
 
     connection.connect(function(err) {

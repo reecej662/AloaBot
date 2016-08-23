@@ -72,6 +72,7 @@ function processEvent(event) {
                     console.log('Response as text message: ' + responseText);
                     // facebook API limit for text length is 320,
                     // so we must split message if needed
+                    console.log(sender);
 
                     if(action == 'get_projects') {
                         aloaDb.getProjects(response.result.parameters.client, function(message) {
