@@ -1,3 +1,5 @@
+const request = require('request');
+
 const FB_PAGE_ACCESS_TOKEN = 'EAAOV2mJd4dkBAHiPZCtiWsqvO5ZCaNmiKSUZAEKh3dXyK7LKq2ZCquKhe3FfFQxmwjqmIdOQdwXdwlFk9clwWvhkTMZBDyDRkzc3Cj5932pFhwNOhW38aH2fmHVc2aCZAfWsZBKKmXlcZCgLxZCzID37ZChMSKoZADgrpkoNSMZC2EutZBwZDZD'
 const FB_VERIFY_TOKEN = 'aloalabs1'
 
@@ -14,7 +16,7 @@ if(process.argv.length == 3) {
 	return;
 }
 
-sending(fbID, message, function() {
+sendFBMessage(fbID, {text: message}, function() {
 	console.log('Message sent!');
 });
 
