@@ -73,15 +73,15 @@ function processEvent(event) {
                     // so we must split message if needed
 
                     if(action == 'get_projects') {
-                        responseText += ' ' + getProjects(response.result.parameters.client);
-                        console.log(responseText);
-                        getProjects(response.result.parameters.client, function(message) {
+                        responseText += ' ' + getProjects(response.result.parameters.client, function(message) {
                             var splittedText = splitResponse(message);
 
                             async.forEachchSeries(splittedText, (textPart, callback) => {
                                 sendFBMessage(sender, {text: textPart}, callback);
                             });
                         });
+
+                        console.log(responseText);
                     } else {
                         var splittedText = splitResponse(message);
 
