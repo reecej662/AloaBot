@@ -72,21 +72,22 @@ function processEvent(event) {
                     // facebook API limit for text length is 320,
                     // so we must split message if needed
 
-                    var sendMessage = function sendMessage(message) {
+                    if(action == 'get_projects') {
+                        responseText += ' ' + getProjects(response.result.parameters.client);
+                        console.log(responseText);
+                        getProjects(response.result.parameters.client, function(message) {
+                            var splittedText = splitResponse(message);
 
+                            async.forEachchSeries(splittedText, (textPart, callback) => {
+                                sendFBMessage(sender, {text: textPart}, callback);
+                            });
+                        });
+                    } else {
                         var splittedText = splitResponse(message);
 
                         async.eachSeries(splittedText, (textPart, callback) => {
                             sendFBMessage(sender, {text: textPart}, callback);
                         });
-                    }
-
-                    if(action == 'get_projects') {
-                        responseText += ' ' + getProjects(response.result.parameters.client);
-                        console.log(responseText);
-                        getProjects(response.result.parameters.client, sendMessage(message));
-                    } else {
-                        sendMessage(responseText);
                     }
                 }
 
@@ -321,7 +322,7 @@ function getProjects(client, completion) {
 
         connection.end();
 
-        completion(result);
+        completion.call(result);
     });
 
     return result;
