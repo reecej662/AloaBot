@@ -16,5 +16,8 @@ var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr
 connection.query(query, function(err, rows, fields) {
   if(err) {
     console.log('Error in SQL command. Try again later');
+    throw err;
   }
+
+  console.log(rows);
 });
