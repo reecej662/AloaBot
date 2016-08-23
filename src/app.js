@@ -322,7 +322,7 @@ function getProjects(client, completion) {
 
         connection.end();
 
-        completion.call(result);
+        completion(result);
     });
 
     return result;
