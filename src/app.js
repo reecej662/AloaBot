@@ -8,7 +8,8 @@ const request = require('request');
 const JSONbig = require('json-bigint');
 const async = require('async');
 
-const aloaDB = require('./aloaDB');
+const aloaDb = require('./aloaDB');
+const mysql = require('mysql');
 
 const REST_PORT = (process.env.PORT || 5000);
 const APIAI_ACCESS_TOKEN = process.env.APIAI_ACCESS_TOKEN;
@@ -73,15 +74,13 @@ function processEvent(event) {
                     // so we must split message if needed
 
                     if(action == 'get_projects') {
-                        getProjects(response.result.parameters.client, function(message) {
+                        aloaDb.getProjects(response.result.parameters.client, function(message) {
                             var splittedText = splitResponse(responseText + ' ' + message);
 
                             async.eachSeries(splittedText, (textPart, callback) => {
                                 sendFBMessage(sender, {text: textPart}, callback);
                             });
                         });
-
-                        console.log(responseText);
                     } else {
                         var splittedText = splitResponse(responseText);
 
@@ -100,10 +99,10 @@ function processEvent(event) {
                     let projectTitle = response.result.parameters.project_title;
                     let projectType = response.result.parameters.project_type;
 
-                    addNewProject(projectTitle, clientName, projectType, payAmount);
+                    aloaDb.addNewProject(projectTitle, clientName, projectType, payAmount);
                 } else if(action == 'get_projects') {
                     let client = response.result.parameters.client;
-                    var result = getProjects(client, function(message){});
+                    var result = aloaDb.getProjects(client, function(message){});
                     console.log(result);
                 }
 
@@ -274,56 +273,3 @@ app.listen(REST_PORT, () => {
 });
 
 doSubscribeRequest();
-
-function addNewProject(name, client, type, cost) {
-  var table = 'projects'
-  var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
-  var sql = "INSERT INTO projects SET ?";
-  var inserts = {'Name': name, 'Client': client, 'Type': type, 'Cost': cost};
-
-  connection.connect(function(err) {
-    if(err) throw err; 
-    console.log("Connected to aloabot_db");
-  });
-
-  connection.query(sql, inserts, function(err, result) {
-    if(err) {
-      throw err;
-    }
-
-    console.log(result);
-    connection.end();
-  });
-}
-
-function getProjects(client, completion) {
-    var table = 'projects';
-    var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
-    var sql = "SELECT * FROM " + table;
-    var result = ""
-
-    if(client != ""){
-        query += " WHERE client=" + client;
-    }
-
-    connection.connect(function(err) {
-        if(err) throw err;
-        console.log("Connected to " + table);
-    })
-
-    connection.query(sql, function(err, rows, fields) {
-        if(err) throw err;
-
-        for(var i in rows) {
-            result += rows[i].name + " for " + rows[i].client + ", a " + rows[i].type + " project with a pay of " + rows[i].cost + ", ";
-        }
-
-        console.log(result);
-
-        connection.end();
-
-        completion(result);
-    });
-
-    return result;
-}
