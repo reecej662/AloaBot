@@ -8,7 +8,7 @@ const request = require('request');
 const JSONbig = require('json-bigint');
 const async = require('async');
 
-const mysql = require('mysql');
+const aloaDB = require('./aloaDB');
 
 const REST_PORT = (process.env.PORT || 5000);
 const APIAI_ACCESS_TOKEN = process.env.APIAI_ACCESS_TOKEN;
