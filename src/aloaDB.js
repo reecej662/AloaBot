@@ -23,7 +23,7 @@ module.exports.addNewProject = function(name, client, type, cost) {
 
     var userIds = getUsers('Swift');
     
-    for var i in userIds {
+    for(var i in userIds){
       sendMessage(userIds[i]);
     }
 
@@ -79,7 +79,7 @@ var getUsers = function(language) {
     if(err) {
       console.log('Error: ' + err);
     } else {
-      for i in rows {
+      for(i in rows){
         console.log(rows[i]);
       }
 
