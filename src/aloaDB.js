@@ -66,7 +66,7 @@ module.exports.getProjects = function(client, completion) {
 var getUsers = function(language) {
   var table = 'projects';
   var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
-  var sql = "SELECT fb_id FROM " + table + " WHERE fav_lang LIKE %" + language +"%";
+  var sql = "SELECT fb_id FROM " + table + " WHERE fav_lang LIKE '%" + language +"%'";
 
   connection.connect(function(err) {
     if(err) throw err;
