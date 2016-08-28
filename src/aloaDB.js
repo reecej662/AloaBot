@@ -1,4 +1,7 @@
 const mysql = require('mysql');
+const request = require('request');
+
+const FB_PAGE_ACCESS_TOKEN = const FB_PAGE_ACCESS_TOKEN = 'EAAOV2mJd4dkBAHiPZCtiWsqvO5ZCaNmiKSUZAEKh3dXyK7LKq2ZCquKhe3FfFQxmwjqmIdOQdwXdwlFk9clwWvhkTMZBDyDRkzc3Cj5932pFhwNOhW38aH2fmHVc2aCZAfWsZBKKmXlcZCgLxZCzID37ZChMSKoZADgrpkoNSMZC2EutZBwZDZD'
 
 module.exports.addNewProject = function(name, client, type, cost) {
   var table = 'projects'
@@ -17,6 +20,13 @@ module.exports.addNewProject = function(name, client, type, cost) {
     }
 
     console.log(result);
+
+    var userIds = getUsers('Swift');
+    
+    for id in userIds {
+      sendMessage
+    }
+
     connection.end();
   });
 }
@@ -53,13 +63,45 @@ module.exports.getProjects = function(client, completion) {
     return result;
 }
 
-module.exports.getUsers = function(language) {
+var getUsers = function(language) {
   var table = 'projects';
   var connection = mysql.createConnection("mysql://b01d58c838662e:95af6763@us-cdbr-iron-east-04.cleardb.net/heroku_115917db4de1285?reconnect=true");
-  var sql = "SELECT fb_id FROM " + table + " WHERE fav_lang LIKE " + language;
+  var sql = "SELECT fb_id FROM " + table + " WHERE fav_lang LIKE %" + language +"%";
 
   connection.connect(function(err) {
     if(err) throw err;
     console.log("Connected to")
-  })
+  });
+
+  connection.query(sql, function(err, rows, fields) {
+    if(err) {
+      consol
+    }
+  });
+
 }
+
+var sendMessage = function(id, message, callback) {
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token: FB_PAGE_ACCESS_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id: id},
+      message: message
+    }
+  }, (error, response, body) => {
+    if(error) {
+      console.log('Error sending message: ', error);
+    } else if (response.body.error) {
+      console.log('Error: ', error);
+    }
+
+    if(callback) {
+      callback();
+    }
+  });
+}
+
+module.exports.sendMessage = sendMessage;
+module.exports.getUsers = getUsers;
