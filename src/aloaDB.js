@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const request = require('request');
 
-const FB_PAGE_ACCESS_TOKEN = const FB_PAGE_ACCESS_TOKEN = 'EAAOV2mJd4dkBAHiPZCtiWsqvO5ZCaNmiKSUZAEKh3dXyK7LKq2ZCquKhe3FfFQxmwjqmIdOQdwXdwlFk9clwWvhkTMZBDyDRkzc3Cj5932pFhwNOhW38aH2fmHVc2aCZAfWsZBKKmXlcZCgLxZCzID37ZChMSKoZADgrpkoNSMZC2EutZBwZDZD'
+const FB_PAGE_ACCESS_TOKEN = 'EAAOV2mJd4dkBAHiPZCtiWsqvO5ZCaNmiKSUZAEKh3dXyK7LKq2ZCquKhe3FfFQxmwjqmIdOQdwXdwlFk9clwWvhkTMZBDyDRkzc3Cj5932pFhwNOhW38aH2fmHVc2aCZAfWsZBKKmXlcZCgLxZCzID37ZChMSKoZADgrpkoNSMZC2EutZBwZDZD'
 
 module.exports.addNewProject = function(name, client, type, cost) {
   var table = 'projects'
@@ -23,8 +23,8 @@ module.exports.addNewProject = function(name, client, type, cost) {
 
     var userIds = getUsers('Swift');
     
-    for id in userIds {
-      sendMessage
+    for var i in userIds {
+      sendMessage(userIds[i]);
     }
 
     connection.end();
@@ -74,9 +74,19 @@ var getUsers = function(language) {
   });
 
   connection.query(sql, function(err, rows, fields) {
+    var userIds = [];
+
     if(err) {
-      consol
+      console.log('Error: ' + err);
+    } else {
+      for i in rows {
+        console.log(rows[i]);
+      }
+
+      return [1167421219983416];
     }
+
+
   });
 
 }
