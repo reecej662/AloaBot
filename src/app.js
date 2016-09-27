@@ -82,6 +82,7 @@ function processEvent(event) {
                                 sendFBMessage(sender, {text: textPart}, callback);
                             });
                         });
+
                     } else {
                         var splittedText = splitResponse(responseText);
 
@@ -101,10 +102,14 @@ function processEvent(event) {
                     let projectType = response.result.parameters.project_type;
 
                     aloaDb.addNewProject(projectTitle, clientName, projectType, payAmount);
+
+                    sendFBMessage('1167421219983416', 'New project you might like', ());
                 } else if(action == 'get_projects') {
                     let client = response.result.parameters.client;
                     var result = aloaDb.getProjects(client, function(message){});
                     console.log(result);
+                } else if(action == 'sign_up') {
+                    
                 }
 
             }
