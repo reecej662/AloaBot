@@ -103,7 +103,7 @@ function processEvent(event) {
 
                     aloaDb.addNewProject(projectTitle, clientName, projectType, payAmount);
 
-                    sendFBMessage('1167421219983416', 'New project you might like');
+                    sendFBMessage('1167421219983416', {text: 'New project you might like'});
                 } else if(action == 'get_projects') {
                     let client = response.result.parameters.client;
                     var result = aloaDb.getProjects(client, function(message){});
