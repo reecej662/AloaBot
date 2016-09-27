@@ -115,5 +115,5 @@ var sendMessage = function(id, message, callback) {
 
 var sql = function()
 
-module.exports.sendMessage = sendMessage;
-module.exports.getUsers = getUsers;
+// module.exports.sendMessage = sendMessage;
+// module.exports.getUsers = getUsers;
